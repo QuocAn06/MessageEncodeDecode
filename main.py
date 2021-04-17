@@ -53,6 +53,22 @@ def Decode(key, message):
     return "".join(dec)
 
 #?=========================Function to set mode===============================
+def Mode():
+    if(_mode.get() == 'e'):
+        _result.set(Encode(private_key.get(),_text.get()))
+    elif(_mode.get() == 'd'):
+        _result.set(Decode(private_key.get(),_text.get()))
+    else:
+        _result.set('Invalid Mode')
+
 #?========================Function to exit window=============================
+def Exit():
+    root.destroy()
 #?========================Function to reset window============================
+def Reset():
+    _text.set("")
+    private_key.set("")
+    _mode.set("")
+    _result.set("")
+    
 #?==========================Labels and Buttons================================
