@@ -27,7 +27,7 @@ _text = StringVar()
 #Todo:  variable stores the key for encoded and decoded
 private_key = StringVar()
 #Todo: variable saves the encoded or decoded mode 
-_mode = StringVar()
+_mode = IntVar()
 #Todo: variable store the result
 _result = StringVar()
 
@@ -54,9 +54,9 @@ def Decode(key, message):
 
 #?=========================Function to set mode===============================
 def Mode():
-    if(_mode.get() == 'e'):
+    if(_mode.get() == 0):
         _result.set(Encode(private_key.get(),_text.get()))
-    elif(_mode.get() == 'd'):
+    elif(_mode.get() == 1):
         _result.set(Decode(private_key.get(),_text.get()))
     else:
         _result.set('Invalid Mode')
@@ -68,7 +68,7 @@ def Exit():
 def Reset():
     _text.set("")
     private_key.set("")
-    _mode.set("")
+    _mode.set(0)
     _result.set("")
 
 #?==========================Labels and Buttons================================
@@ -78,8 +78,14 @@ Entry(root, font=("Segoe UI",10),textvariable=_text,bg='ghost white').place(x= 2
 Label(root, font= ("Segoe UI",12,'bold'), text='Key: ').place(x= 60,y=90)
 Entry(root, font=("Segoe UI",10),textvariable=private_key,bg='ghost white').place(x= 280,y=90)
 
-Label(root, font= ("Segoe UI",12,'bold'), text='Mode(e-encode, d-decode): ').place(x= 60,y=120)
-Entry(root, font=("Segoe UI",10),textvariable=_mode,bg='ghost white').place(x= 280,y=120)
+#Label(root, font= ("Segoe UI",12,'bold'), text='Mode(e-encode, d-decode): ').place(x= 60,y=120)
+#Entry(root, font=("Segoe UI",10),textvariable=_mode,bg='ghost white').place(x= 280,y=120)
+#* Mode: e-encode, d-decode
+Label(root, font= ("Segoe UI",12,'bold'), text='Mode: ').place(x= 60,y=120)
+Radiobutton(root, font=("Segoe UI",10,'bold'), text="Encode", variable = _mode, value = 0,
+            command = (_mode.get())).place(x = 280, y=120)
+Radiobutton(root, font=("Segoe UI",10,'bold'), text="Decode", variable = _mode, value = 1,
+            command = (_mode.get())).place(x = 380, y=120)
 
 Entry(root,font=("Segoe UI",10,'bold'),textvariable=_result,bg='ghost white').place(x= 280,y=150)
 
