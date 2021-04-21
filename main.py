@@ -43,9 +43,9 @@ def Encode(key, message):
         enc.append(chr((ord(message[i]) + ord(key_c)) % 256))
 
     return base64.urlsafe_b64encode("".join(enc).encode()).decode()'''
-    p=message.upper()
-    k=key.upper()
-    cVignere=CVignere(p,k)
+    #p=message.upper()
+    #k=key.upper()
+    cVignere=CVignere(message,key)
     ciphertext = cVignere.MaHoa()
     return ciphertext
 
@@ -62,9 +62,11 @@ def Decode(key, message):
 
 #?=========================Function to set mode===============================
 def Mode():
+    _mess = (_text.get()).upper()
+    _key = (private_key.get()).upper()
+    
     if(_mode.get() == 0):
-        _result.set(Encode(private_key.get(),_text.get()))
-        Textbox.insert(0,"Hay")
+        _result.set(Encode(_key,_mess))
     elif(_mode.get() == 1):
         _result.set(Decode(private_key.get(),_text.get()))
     else:
