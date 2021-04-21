@@ -7,6 +7,8 @@ from tkinter.scrolledtext import *
 #Todo: other necessery modules
 import base64
 
+#Todo: import Class
+from ClassVignere import *
 #?=============================Initialize Window==============================
 #Todo: initialized tkinter which means window created
 root = Tk()
@@ -34,13 +36,18 @@ _result = StringVar()
 
 #?============================Function to encode==============================
 def Encode(key, message):
-    enc = []
+    '''enc = []
 
     for i in range(len(message)):
         key_c = key[i % len(key)]
         enc.append(chr((ord(message[i]) + ord(key_c)) % 256))
 
-    return base64.urlsafe_b64encode("".join(enc).encode()).decode()
+    return base64.urlsafe_b64encode("".join(enc).encode()).decode()'''
+    p=message.upper()
+    k=key.upper()
+    cVignere=CVignere(p,k)
+    ciphertext = cVignere.MaHoa()
+    return ciphertext
 
 #?===========================Function to decode===============================
 def Decode(key, message):
