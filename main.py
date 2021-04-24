@@ -53,14 +53,15 @@ def Encode(key, message):
 
 #?===========================Function to decode===============================
 def Decode(key, message):
-    dec = []
+    '''dec = []
     message = base64.urlsafe_b64decode(message).decode()
 
     for i in range(len(message)):
         key_c = key[i % len(key)]
-        dec.append(chr((256 + ord(message[i])-ord(key_c)) % 256))
-    
-    return "".join(dec)
+        dec.append(chr((256 + ord(message[i])-ord(key_c)) % 256))'''
+    cVignere = CVignere(" ",key,message)
+    plaintext = cVignere.GiaiMa()
+    return plaintext
 
 #?=========================Function to set mode===============================
 def Mode():
@@ -70,7 +71,7 @@ def Mode():
     if(_mode.get() == 0):
         _result.set(Encode(_key,_mess))
     elif(_mode.get() == 1):
-        _result.set(Decode(private_key.get(),_text.get()))
+        _result.set(Decode(_key,_mess))
     else:
         _result.set('Invalid Mode')
 
@@ -92,7 +93,7 @@ Entry(root,font=("Segoe UI",10),textvariable=_text, bg='ghost white').place(x= 2
 Label(root, font= ("Segoe UI",12,'bold'), text='Key: ').place(x= 60,y=90)
 Entry(root, font=("Segoe UI",10),textvariable=private_key, bg='ghost white').place(x= 280,y=90,height = 22, width = 350)
 
-Label(root, font= ("Segoe UI",12,'bold'), text='Key: ').place(x= 60,y=120)
+Label(root, font= ("Segoe UI",12,'bold'), text='Encoding type: ').place(x= 60,y=120)
 _combobox = ttk.Combobox(root,font=("Segoe UI",10,'bold'),
                 textvariable=_class)
 _combobox['values'] = ('Vignere','Belasco')
