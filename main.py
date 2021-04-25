@@ -48,16 +48,12 @@ def Encode(key, message):
     elif _type == "Belasco":
         obj=CBelasco(message,key)
         ciphertext = obj.MaHoa()
+   
     return ciphertext
 
 #?===========================Function to decode===============================
 def Decode(key, message):
-    '''dec = []
-    message = base64.urlsafe_b64decode(message).decode()
-
-    for i in range(len(message)):
-        key_c = key[i % len(key)]
-        dec.append(chr((256 + ord(message[i])-ord(key_c)) % 256))'''
+   
     cVignere = CVignere(" ",key,message)
     plaintext = cVignere.GiaiMa()
     return plaintext
@@ -83,7 +79,7 @@ def Reset():
     private_key.set("")
     _mode.set(0)
     _result.set("")
-
+    
 #?==========================Labels and Buttons================================
 Label(root, font= ("Segoe UI",12,'bold'), text='Message: ').place(x= 60,y=60)
 Entry(root,font=("Segoe UI",10),textvariable=_text, bg='ghost white').place(x= 280,y=60, 
