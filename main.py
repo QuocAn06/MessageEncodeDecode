@@ -10,6 +10,7 @@ import base64
 
 #Todo: import Class
 from ClassVignere import *
+from ClassBelasco import *
 #?=============================Initialize Window==============================
 #Todo: initialized tkinter which means window created
 root = Tk()
@@ -38,17 +39,15 @@ _result = StringVar()
 _class = StringVar()
 #?============================Function to encode==============================
 def Encode(key, message):
-    '''enc = []
+    ciphertext=""
+    _type = _class.get()
 
-    for i in range(len(message)):
-        key_c = key[i % len(key)]
-        enc.append(chr((ord(message[i]) + ord(key_c)) % 256))
-
-    return base64.urlsafe_b64encode("".join(enc).encode()).decode()'''
-    #p=message.upper()
-    #k=key.upper()
-    cVignere=CVignere(message,key)
-    ciphertext = cVignere.MaHoa()
+    if  _type == "Vignere":
+        obj=CVignere(message,key)
+        ciphertext = obj.MaHoa()
+    elif _type == "Belasco":
+        obj=CBelasco(message,key)
+        ciphertext = obj.MaHoa()
     return ciphertext
 
 #?===========================Function to decode===============================
