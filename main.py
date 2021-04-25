@@ -93,14 +93,14 @@ Entry(root,font=("Segoe UI",10),textvariable=_text, bg='ghost white').place(x= 2
 Label(root, font= ("Segoe UI",12,'bold'), text='Key: ').place(x= 60,y=90)
 Entry(root, font=("Segoe UI",10),textvariable=private_key, bg='ghost white').place(x= 280,y=90,height = 22, width = 350)
 
+#* Type encoding
 Label(root, font= ("Segoe UI",12,'bold'), text='Encoding type: ').place(x= 60,y=120)
 _combobox = ttk.Combobox(root,font=("Segoe UI",10,'bold'),
                 textvariable=_class)
 _combobox['values'] = ('Vignere','Belasco')
 _combobox.current(1)
 _combobox.place(x=280,y=120)
-#Label(root, font= ("Segoe UI",12,'bold'), text='Mode(e-encode, d-decode): ').place(x= 60,y=120)
-#Entry(root, font=("Segoe UI",10),textvariable=_mode,bg='ghost white').place(x= 280,y=120)
+
 #* Mode: e-encode, d-decode
 Label(root, font= ("Segoe UI",12,'bold'), text='Mode: ').place(x= 60,y=150)
 Radiobutton(root, font=("Segoe UI",10,'bold'), text="Encode", variable = _mode, value = 0,
