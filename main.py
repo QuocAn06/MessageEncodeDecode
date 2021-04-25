@@ -53,9 +53,15 @@ def Encode(key, message):
 
 #?===========================Function to decode===============================
 def Decode(key, message):
-   
-    cVignere = CVignere(" ",key,message)
-    plaintext = cVignere.GiaiMa()
+    plaintext=""
+    _type = _class.get()
+
+    if _type == "Vignere":
+        obj = CVignere(plaintext,key,message)
+        plaintext = obj.GiaiMa()
+    elif _type == "Belasco":
+        obj = CBelasco(plaintext,key,message)
+        plaintext = obj.GiaiMa()
     return plaintext
 
 #?=========================Function to set mode===============================
