@@ -10,6 +10,7 @@ import base64
 
 #Todo: import Class
 from ClassVignere import *
+from ClassBelasco import *
 #?=============================Initialize Window==============================
 #Todo: initialized tkinter which means window created
 root = Tk()
@@ -38,29 +39,30 @@ _result = StringVar()
 _class = StringVar()
 #?============================Function to encode==============================
 def Encode(key, message):
-    '''enc = []
+    ciphertext=""
+    _type = _class.get()
 
-    for i in range(len(message)):
-        key_c = key[i % len(key)]
-        enc.append(chr((ord(message[i]) + ord(key_c)) % 256))
-
-    return base64.urlsafe_b64encode("".join(enc).encode()).decode()'''
-    #p=message.upper()
-    #k=key.upper()
-    cVignere=CVignere(message,key)
-    ciphertext = cVignere.MaHoa()
+    if  _type == "Vignere":
+        obj=CVignere(message,key)
+        ciphertext = obj.MaHoa()
+    elif _type == "Belasco":
+        obj=CBelasco(message,key)
+        ciphertext = obj.MaHoa()
+   
     return ciphertext
 
 #?===========================Function to decode===============================
 def Decode(key, message):
-    dec = []
-    message = base64.urlsafe_b64decode(message).decode()
+    plaintext=""
+    _type = _class.get()
 
-    for i in range(len(message)):
-        key_c = key[i % len(key)]
-        dec.append(chr((256 + ord(message[i])-ord(key_c)) % 256))
-    
-    return "".join(dec)
+    if _type == "Vignere":
+        obj = CVignere(plaintext,key,message)
+        plaintext = obj.GiaiMa()
+    elif _type == "Belasco":
+        obj = CBelasco(plaintext,key,message)
+        plaintext = obj.GiaiMa()
+    return plaintext
 
 #?=========================Function to set mode===============================
 def Mode():
@@ -70,7 +72,7 @@ def Mode():
     if(_mode.get() == 0):
         _result.set(Encode(_key,_mess))
     elif(_mode.get() == 1):
-        _result.set(Decode(private_key.get(),_text.get()))
+        _result.set(Decode(_key,_mess))
     else:
         _result.set('Invalid Mode')
 
@@ -83,7 +85,7 @@ def Reset():
     private_key.set("")
     _mode.set(0)
     _result.set("")
-
+    
 #?==========================Labels and Buttons================================
 Label(root, font= ("Segoe UI",12,'bold'), text='Message: ').place(x= 60,y=60)
 Entry(root,font=("Segoe UI",10),textvariable=_text, bg='ghost white').place(x= 280,y=60, 
@@ -92,14 +94,14 @@ Entry(root,font=("Segoe UI",10),textvariable=_text, bg='ghost white').place(x= 2
 Label(root, font= ("Segoe UI",12,'bold'), text='Key: ').place(x= 60,y=90)
 Entry(root, font=("Segoe UI",10),textvariable=private_key, bg='ghost white').place(x= 280,y=90,height = 22, width = 350)
 
-Label(root, font= ("Segoe UI",12,'bold'), text='Key: ').place(x= 60,y=120)
+#* Type encoding
+Label(root, font= ("Segoe UI",12,'bold'), text='Encoding type: ').place(x= 60,y=120)
 _combobox = ttk.Combobox(root,font=("Segoe UI",10,'bold'),
                 textvariable=_class)
 _combobox['values'] = ('Vignere','Belasco')
 _combobox.current(1)
 _combobox.place(x=280,y=120)
-#Label(root, font= ("Segoe UI",12,'bold'), text='Mode(e-encode, d-decode): ').place(x= 60,y=120)
-#Entry(root, font=("Segoe UI",10),textvariable=_mode,bg='ghost white').place(x= 280,y=120)
+
 #* Mode: e-encode, d-decode
 Label(root, font= ("Segoe UI",12,'bold'), text='Mode: ').place(x= 60,y=150)
 Radiobutton(root, font=("Segoe UI",10,'bold'), text="Encode", variable = _mode, value = 0,
