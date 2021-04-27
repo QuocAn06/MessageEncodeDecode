@@ -11,6 +11,7 @@ import base64
 #Todo: import Class
 from ClassVignere import *
 from ClassBelasco import *
+from ClassTrithemius import *
 #?=============================Initialize Window==============================
 #Todo: initialized tkinter which means window created
 root = Tk()
@@ -43,12 +44,15 @@ def Encode(key, message):
     _type = _class.get()
 
     if  _type == "Vignere":
-        obj=CVignere(message,key)
+        obj = CVignere(message,key)
         ciphertext = obj.MaHoa()
     elif _type == "Belasco":
-        obj=CBelasco(message,key)
+        obj = CBelasco(message,key)
         ciphertext = obj.MaHoa()
-   
+    elif _type == "Trithemius":
+        obj = CTrithemius(message)
+        ciphertext = obj.MaHoa()
+
     return ciphertext
 
 #?===========================Function to decode===============================
@@ -62,6 +66,10 @@ def Decode(key, message):
     elif _type == "Belasco":
         obj = CBelasco(plaintext,key,message)
         plaintext = obj.GiaiMa()
+    elif _type == "Trithemius":
+        obj = CTrithemius(plaintext,message)
+        plaintext = obj.GiaiMa()
+    
     return plaintext
 
 #?=========================Function to set mode===============================
@@ -98,7 +106,7 @@ Entry(root, font=("Segoe UI",10),textvariable=private_key, bg='ghost white').pla
 Label(root, font= ("Segoe UI",12,'bold'), text='Encoding type: ').place(x= 60,y=120)
 _combobox = ttk.Combobox(root,font=("Segoe UI",10,'bold'),
                 textvariable=_class)
-_combobox['values'] = ('Vignere','Belasco')
+_combobox['values'] = ('Vignere','Belasco','Trithemius')
 _combobox.current(1)
 _combobox.place(x=280,y=120)
 
