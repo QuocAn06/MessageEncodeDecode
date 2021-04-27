@@ -38,6 +38,7 @@ _mode = IntVar()
 _result = StringVar()
 #Todo: get name class
 _class = StringVar()
+
 #?============================Function to encode==============================
 def Encode(key, message):
     ciphertext=""
@@ -93,22 +94,30 @@ def Reset():
     private_key.set("")
     _mode.set(0)
     _result.set("")
-    
+
+#?==========================Labels and Buttons================================
+def window_Update(event):
+    a = _class.get()
+    if a == "Trithemius":
+        key_Entry['state']='disabled'
+    else:
+        key_Entry['state']='normal'
 #?==========================Labels and Buttons================================
 Label(root, font= ("Segoe UI",12,'bold'), text='Message: ').place(x= 60,y=60)
 Entry(root,font=("Segoe UI",10),textvariable=_text, bg='ghost white').place(x= 280,y=60, 
         height = 22, width = 350)
-
 Label(root, font= ("Segoe UI",12,'bold'), text='Key: ').place(x= 60,y=90)
-Entry(root, font=("Segoe UI",10),textvariable=private_key, bg='ghost white').place(x= 280,y=90,height = 22, width = 350)
-
+key_Entry = Entry(root, font=("Segoe UI",10), textvariable=private_key, state = 'normal',
+                    bg='ghost white')
+key_Entry.place(x= 280,y=90,height = 22, width = 350)
 #* Type encoding
 Label(root, font= ("Segoe UI",12,'bold'), text='Encoding type: ').place(x= 60,y=120)
 _combobox = ttk.Combobox(root,font=("Segoe UI",10,'bold'),
                 textvariable=_class)
 _combobox['values'] = ('Vignere','Belasco','Trithemius')
-_combobox.current(1)
+_combobox.current(0)
 _combobox.place(x=280,y=120)
+_combobox.bind("<<ComboboxSelected>>",window_Update)
 
 #* Mode: e-encode, d-decode
 Label(root, font= ("Segoe UI",12,'bold'), text='Mode: ').place(x= 60,y=150)
@@ -127,6 +136,8 @@ Button(root, font = ("Segoe UI",10,'bold') ,text ='RESET' ,width =6,
             command = Reset,bg = 'LimeGreen', padx=2).place(x=280, y = 280)
 Button(root, font = ("Segoe UI",10,'bold') ,text= 'EXIT' , width = 6, 
             command = Exit,bg = 'OrangeRed', padx=2, pady=2).place(x=380, y = 280)
+
+
 
 root.mainloop()
 
