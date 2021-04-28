@@ -1,11 +1,16 @@
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout
-import sys
-app = QApplication([])
-window = QMainWindow()
-layout = QVBoxLayout()
-layout.addWidget(QPushButton('Top'))
-layout.addWidget(QPushButton('Bottom'))
-window.setLayout(layout)
-window.show()
-app.exec()
+def count_substring(string, sub_string):
+    count = 0
+
+    for i in range(0,len(string)):
+        a = string[i:(i+len(sub_string))]
+        if a == sub_string:
+            count += 1
+
+    return count 
+
+if __name__ == '__main__':
+    string = input().strip()
+    sub_string = input().strip()
+    
+    count = count_substring(string, sub_string)
+    print(count)
