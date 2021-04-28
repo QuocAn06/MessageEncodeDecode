@@ -12,6 +12,8 @@ import base64
 from ClassVignere import *
 from ClassBelasco import *
 from ClassTrithemius import *
+from ClassCeasar import*
+
 #?=============================Initialize Window==============================
 #Todo: initialized tkinter which means window created
 root = Tk()
@@ -38,6 +40,8 @@ _mode = IntVar()
 _result = StringVar()
 #Todo: get name class
 _class = StringVar()
+#Todo: List type
+list_type=('Vignere', 'Belasco', 'Trithemius', 'Ceasar')
 
 #?============================Function to encode==============================
 def Encode(key, message):
@@ -52,6 +56,9 @@ def Encode(key, message):
         ciphertext = obj.MaHoa()
     elif _type == "Trithemius":
         obj = CTrithemius(message)
+        ciphertext = obj.MaHoa()
+    elif _type == "Ceasar":
+        obj = CCeasar(message,3)
         ciphertext = obj.MaHoa()
 
     return ciphertext
@@ -98,7 +105,7 @@ def Reset():
 #?==========================Labels and Buttons================================
 def window_Update(event):
     a = _class.get()
-    if a == "Trithemius":
+    if a in ["Trithemius","Ceasar"]:
         key_Entry['state']='disabled'
     else:
         key_Entry['state']='normal'
@@ -114,7 +121,8 @@ key_Entry.place(x= 280,y=90,height = 22, width = 350)
 Label(root, font= ("Segoe UI",12,'bold'), text='Encoding type: ').place(x= 60,y=120)
 _combobox = ttk.Combobox(root,font=("Segoe UI",10,'bold'),
                 textvariable=_class)
-_combobox['values'] = ('Vignere','Belasco','Trithemius')
+
+_combobox['values'] = sorted(list_type)
 _combobox.current(0)
 _combobox.place(x=280,y=120)
 _combobox.bind("<<ComboboxSelected>>",window_Update)
