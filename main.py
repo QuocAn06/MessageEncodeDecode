@@ -77,7 +77,10 @@ def Decode(key, message):
     elif _type == "Trithemius":
         obj = CTrithemius(plaintext,message)
         plaintext = obj.GiaiMa()
-    
+    elif _type == "Ceasar":
+        obj = CCeasar(plaintext,3,message) 
+        plaintext = obj.GiaiMa()
+        
     return plaintext
 
 #?=========================Function to set mode===============================
