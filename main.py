@@ -61,6 +61,9 @@ def Encode(key, message):
     elif _type == "Ceasar":
         obj = CCeasar(message,3)
         ciphertext = obj.MaHoa()
+    elif _type == "Transpose Two Lines":
+        obj = CChuyenViHaiDong(message)
+        ciphertext = obj.MaHoa()
 
     return ciphertext
 
