@@ -13,6 +13,7 @@ from ClassVignere import *
 from ClassBelasco import *
 from ClassTrithemius import *
 from ClassCeasar import*
+from ClassTransposeTwoLines import *
 
 #?=============================Initialize Window==============================
 #Todo: initialized tkinter which means window created
@@ -41,7 +42,7 @@ _result = StringVar()
 #Todo: get name class
 _class = StringVar()
 #Todo: List type
-list_type=('Vignere', 'Belasco', 'Trithemius', 'Ceasar')
+list_type=('Vignere', 'Belasco', 'Trithemius', 'Ceasar',"Transpose Two Lines")
 
 #?============================Function to encode==============================
 def Encode(key, message):
@@ -80,7 +81,7 @@ def Decode(key, message):
     elif _type == "Ceasar":
         obj = CCeasar(plaintext,3,message) 
         plaintext = obj.GiaiMa()
-        
+
     return plaintext
 
 #?=========================Function to set mode===============================
@@ -108,7 +109,7 @@ def Reset():
 #?==========================Labels and Buttons================================
 def window_Update(event):
     a = _class.get()
-    if a in ["Trithemius","Ceasar"]:
+    if a in ["Trithemius","Ceasar","Transpose Two Lines"]:
         key_Entry['state']='disabled'
     else:
         key_Entry['state']='normal'
