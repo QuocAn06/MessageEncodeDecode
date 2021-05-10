@@ -152,3 +152,107 @@ def binvalue(val, bitsize):
 #?: Ghép một danh sách vào các danh sách con có kích thước n.
 def nsplit(s, n): #Split a list into sublists of size n.
     return [s[k:k+n] for k in range(0, len(s), n)]
+
+#==============================================================================
+ENCRYPT=1
+DECRYPT=0
+
+#==============================================================================
+class des():
+    def __init__(self):
+        self.password = None
+        self.text = None
+        self.keys = list()
+#==============================================================================
+     def run(self, key, text, action=ENCRYPT, padding=False):
+        if len(key) < 8:
+            raise "Key Should be 8 bytes long !"
+        elif len(key) > 8:
+            #Todo: Nếu kích thước của khóa trên 8byte, hãy cắt xuống dài 8byte.
+            key = key[:8]
+        
+        self.password = key
+        self.text = text
+        
+        if padding and action==ENCRYPT:
+            self.addPadding()
+        #Todo: Nếu không, kích thước dữ liệu được chỉ định đệm phải là bội số của 8 byte.
+        elif len(self.text) % 8 != 0:
+            raise "Data size should be multiple of 8 !"
+        
+        #Todo: Tạo ra tất cả các phím.
+        self.generatekeys()
+        #Todo: Chia văn bản thành các khối 8 byte.
+        text_blocks = nsplit(self.text, 8)
+        result = list()
+
+        #Todo: Vòng lặp trên tất cả các khối dữ liệu.
+        for block in text_blocks:
+            #Todo: Chuyển đổi khối trong mảng bit.
+            block = str_to_bit_array(block)
+            #Todo: Áp dụng hoán vị ban đầu.
+            block = self.pmt(block,P_i)
+            l, r = nsplit(block, 32) # l(LEFT),r(RIGHT).
+            tmp = None
+
+            for i in range(16): #16 rounds.
+                #Todo: Mở rộng r để phù hợp với kích thước K_i (48bits).
+                r_e = self.expand(r, E)
+                if action == ENCRYPT:
+                    #Todo: Nếu mã hóa, sử dụng K_i.
+                    tmp = self.xor(self.keys[i], r_e)
+                else:
+                    #Todo: Nếu giải mã, hãy bắt đầu bằng phím cuối cùng.
+                    tmp = self.xor(self.keys[15-i], r_e)
+                
+                #Todo: Phương pháp sẽ áp dụng SBOXes
+                tmp = self.substitute(tmp)
+                tmp = self.pmt(tmp, P)
+                tmp = self.xor(l, tmp)
+                l = r
+                r = tmp
+            
+            #Todo: Có hoán vị cuối cùng và nối kết quả với kết quả.
+            result += self.pmt(r+l, P_f)
+        final_res = bit_array_to_str(result)
+        if padding and action==DECRYPT:
+            #Todo: Loại bỏ phần đệm, nếu giải mã và phần đệm là đúng.
+            return self.removePadding(final_res)
+        else:
+            #Todo: Trả về chuỗi dữ liệu cuối cùng được mã hóa hoặc giải mã.
+            return final_res
+
+#==============================================================================
+    #?: Thay thế byte bằng cách sử dụng SBOX.
+    def substitute(self, r_e):
+        #Todo: Tách mảng bit thành danh sách con gồm 6 bit.
+        subblocks = nsplit(r_e, 6)
+        result = list()
+
+        #Todo: Đối với tất cả các danh sách phụ
+        for i in range(len(subblocks)):
+            block = subblocks[i]
+            
+            #Todo: Lấy hàng có bit đầu tiên và cuối cùng
+            row = int(str(block[0])+str(block[5]),2)
+            #Todo: Cột là các bit thứ 2,3,4,5
+            column = int(''.join([str(x) for x in block[1:][:-1]]),2)
+            #Todo: Lấy giá trị trong SBOX dành cho vòng (i)
+            val = S_box[i][row][column]
+            #Todo: Chuyển đổi giá trị thành nhị phân
+            bin = binvalue(val, 4)
+            #Todo: Và thêm nó vào danh sách kết quả
+            result += [int(x) for x in bin]
+        return result
+
+#==============================================================================
+    def pmt(self, block, table):
+        return [block[x-1] for x in table]
+
+    #Todo: Thực hiện điều tương tự hơn so với hoán vị.
+    def expand(self, block, table):
+        return [block[x-1] for x in table]
+    
+    #Todo: Áp dụng XOR và trả về danh sách kết quả.
+    def xor(self, t1, t2):
+        return [x^y for x,y in zip(t1,t2)]
