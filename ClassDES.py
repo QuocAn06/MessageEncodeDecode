@@ -164,7 +164,7 @@ class des():
         self.text = None
         self.keys = list()
 #==============================================================================
-     def run(self, key, text, action=ENCRYPT, padding=False):
+    def run(self, key, text, action=ENCRYPT, padding=False):
         if len(key) < 8:
             raise "Key Should be 8 bytes long !"
         elif len(key) > 8:
@@ -249,10 +249,68 @@ class des():
     def pmt(self, block, table):
         return [block[x-1] for x in table]
 
-    #Todo: Thực hiện điều tương tự hơn so với hoán vị.
+#==============================================================================
+    #?: Thực hiện điều tương tự hơn so với hoán vị.
     def expand(self, block, table):
         return [block[x-1] for x in table]
     
-    #Todo: Áp dụng XOR và trả về danh sách kết quả.
+#==============================================================================
+    #?: Áp dụng XOR và trả về danh sách kết quả.
     def xor(self, t1, t2):
         return [x^y for x,y in zip(t1,t2)]
+
+#==============================================================================
+    #?: Thuật toán tạo tất cả các khóa.
+    def generatekeys(self):
+        self.keys = []
+        key = str_to_bit_array(self.password)
+        #Todo: Áp dụng hoán vị ban đầu trên khóa.
+        key = self.pmt(key, PC_1)
+        #Todo: Tách nó sang trái (l) và phải (r).
+        l, r = nsplit(key, 28)
+        #Todo: Áp dụng cho vòng 16.
+        for i in range(16):
+            #Todo: Áp dụng sự thay đổi theo vòng.
+            l, r = self.shift(l, r, SHIFT[i])
+            #Todo: Hợp nhất chúng.
+            tmp = l + r
+            #Todo: Áp dụng hoán vị để lấy K_i.
+            self.keys.append(self.pmt(tmp, PC_2))
+
+#==============================================================================
+    def shift(self, l, r, n): #Shifts a list of the given value.
+        return l[n:] + l[:n], r[n:] + r[:n]
+
+#==============================================================================    
+    def addPadding(self): #Adds padding to the datas by using PKCS5.
+        pad_len = 8 - (len(self.text) % 8)
+        self.text += pad_len * chr(pad_len)
+
+#==============================================================================
+    def removePadding(self, data): #Removes the padding of the plain text (If there is padding).
+        pad_len = ord(data[-1])
+        return data[:-pad_len]
+    
+#==============================================================================    
+    def encrypt(self, key, text, padding=True):
+        return self.run(key, text, ENCRYPT, padding)
+
+#==============================================================================
+    def decrypt(self, key, text, padding=True):
+        return self.run(key, text, DECRYPT, padding)
+
+#==============================================================================
+welcome = int(input("Welcome, to continue, Which year 'CryptoQuantus' was established ? :"))
+print (welcome)
+
+if welcome != int("2019"):
+   print("Actually 2019 :D")
+elif __name__ == '__main__':
+     key = input ("Enter your 8 Character-Key :")
+     text= input ("Plaintext:")
+     d = des()
+     ciphered = d.encrypt(key,text,padding=True) 
+     plain = d.decrypt(key,ciphered,padding=True) 
+     print ("Plaintext: ", plain)
+     print ("Ciphertext %r" % ciphered)
+     print ("by otapsin")
