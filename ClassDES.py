@@ -119,7 +119,7 @@ P = [16, 7, 20, 21, 29, 12, 28, 17,
 SHIFT = [1,1,2,2,2,2,2,2,1,2,2,2,2,2,2,1]
 
 #==============================================================================
-#? Chuyển đổi một chuỗi thành một danh sách các bit.
+#?: Chuyển đổi một chuỗi thành một danh sách các bit.
 def str_to_bit_array(text): 
     array = list()
     for char in text:
@@ -130,9 +130,25 @@ def str_to_bit_array(text):
     return array
 
 #==============================================================================
-#? Tạo lại chuỗi từ mảng bit.
+#?: Tạo lại chuỗi từ mảng bit.
 def bit_array_to_str(array):
     res = ''.join([chr(int(y,2)) 
                     for y in [''.join([str(x) for x in _bytes]) 
                         for _bytes in  nsplit(array,8)]])   
     return res
+
+#==============================================================================
+#?: Trả về giá trị nhị phân dưới dạng một chuỗi có kích thước đã cho.
+def binvalue(val, bitsize):
+    binval = bin(val)[2:] if isinstance(val, int) else bin(ord(val))[2:]
+    if len(binval) > bitsize:
+        raise "Binary value is too large"
+    while len(binval) < bitsize:
+        #Todo: Thêm nhiều số 0 nếu cần để có được kích thước mong muốn (phần đệm).
+        binval = "0"+binval
+    return binval
+
+#==============================================================================
+#?: Ghép một danh sách vào các danh sách con có kích thước n.
+def nsplit(s, n): #Split a list into sublists of size n.
+    return [s[k:k+n] for k in range(0, len(s), n)]
