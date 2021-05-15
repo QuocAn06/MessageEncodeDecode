@@ -158,7 +158,7 @@ ENCRYPT=1
 DECRYPT=0
 
 #==============================================================================
-class des():
+class _des():
     def __init__(self):
         self.password = None
         self.text = None
@@ -300,12 +300,13 @@ class des():
         return self.run(key, text, DECRYPT, padding)
 
 #==============================================================================
-welcome = int(input("Welcome, to continue, Which year 'CryptoQuantus' was established ? :"))
+'''welcome = int(input("Welcome, to continue, Which year 'CryptoQuantus' was established ? :"))
 print (welcome)
 
 if welcome != int("2019"):
    print("Actually 2019 :D")
-elif __name__ == '__main__':
+el'''
+'''if __name__ == '__main__':
      key = input ("Enter your 8 Character-Key :")
      text= input ("Plaintext:")
      d = des()
@@ -313,4 +314,4 @@ elif __name__ == '__main__':
      plain = d.decrypt(key,ciphered,padding=True) 
      print ("Plaintext: ", plain)
      print ("Ciphertext %r" % ciphered)
-     print ("by otapsin")
+     print ("by otapsin")'''

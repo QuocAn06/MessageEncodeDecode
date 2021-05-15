@@ -1,10 +1,36 @@
 
-#Todo: Tạo ma trận hoán vị ban đầu cho dữ liệu đầu vào
-PI = [58, 50, 42, 34, 26, 18, 10, 2,
-      60, 52, 44, 36, 28, 20, 12, 4,
-      62, 54, 46, 38, 30, 22, 14, 6,
-      64, 56, 48, 40, 32, 24, 16, 8,
-      57, 49, 41, 33, 25, 17, 9, 1,
-      59, 51, 43, 35, 27, 19, 11, 3,
-      61, 53, 45, 37, 29, 21, 13, 5,
-      63, 55, 47, 39, 31, 23, 15, 7]
+from pyDes import des, CBC, PAD_PKCS5
+import binascii
+ 
+# Secret key 
+KEY='abcdefgh'
+def des_encrypt(s):
+    """
+         DES encryption
+         :param s: raw string
+         :return: Encrypted string, hexadecimal
+    """
+    secret_key = KEY
+    iv = secret_key
+    k = des(secret_key, CBC, iv, pad=None, padmode=PAD_PKCS5)
+    en = k.encrypt(s, padmode=PAD_PKCS5)
+    return binascii.b2a_hex(en)
+ 
+ 
+def des_descrypt(s):
+    """
+         DES decryption
+         :param s: encrypted string, hexadecimal
+         :return: the decrypted string
+    """
+    secret_key = KEY
+    iv = secret_key
+    k = des(secret_key, CBC, iv, pad=None, padmode=PAD_PKCS5)
+    de = k.decrypt(binascii.a2b_hex(s), padmode=PAD_PKCS5)
+    return de
+ 
+s='Have a nice day'
+enc=des_encrypt(s)
+print(enc)
+des=des_descrypt(enc)
+print(des)
