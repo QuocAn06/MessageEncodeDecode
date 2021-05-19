@@ -51,23 +51,24 @@ def Encode(key, message):
     _type = _class.get()
 
     if  _type == "Vignere":
-        obj = CVignere(message,key)
+        obj = CVignere(message.upper(),key)
         ciphertext = obj.MaHoa()
     elif _type == "Belasco":
-        obj = CBelasco(message,key)
+        obj = CBelasco(message.upper(),key)
         ciphertext = obj.MaHoa()
     elif _type == "Trithemius":
-        obj = CTrithemius(message)
+        obj = CTrithemius(message.upper())
         ciphertext = obj.MaHoa()
     elif _type == "Ceasar":
-        obj = CCeasar(message,3)
+        obj = CCeasar(message.upper(),3)
         ciphertext = obj.MaHoa()
     elif _type == "Transpose Two Lines":
-        obj = CChuyenViHaiDong(message)
+        obj = CChuyenViHaiDong(message.upper())
         ciphertext = obj.MaHoa()
     elif _type =='DES':
         obj = CDes(message,key)
         ciphertext = obj.MaHoa()
+        
     return ciphertext
 
 #?===========================Function to decode===============================
@@ -76,19 +77,19 @@ def Decode(key, message):
     _type = _class.get()
 
     if _type == "Vignere":
-        obj = CVignere(plaintext,key,message)
+        obj = CVignere(plaintext,key,message.upper())
         plaintext = obj.GiaiMa()
     elif _type == "Belasco":
-        obj = CBelasco(plaintext,key,message)
+        obj = CBelasco(plaintext,key,message.upper())
         plaintext = obj.GiaiMa()
     elif _type == "Trithemius":
-        obj = CTrithemius(plaintext,message)
+        obj = CTrithemius(plaintext,message.upper())
         plaintext = obj.GiaiMa()
     elif _type == "Ceasar":
-        obj = CCeasar(plaintext,3,message) 
+        obj = CCeasar(plaintext,3,message.upper()) 
         plaintext = obj.GiaiMa()
     elif _type == "Transpose Two Lines":
-        obj = CChuyenViHaiDong(plaintext,message)
+        obj = CChuyenViHaiDong(plaintext,message.upper())
         plaintext = obj.GiaiMa()
     elif _type =='DES':
         obj = CDes(plaintext,key,message)
