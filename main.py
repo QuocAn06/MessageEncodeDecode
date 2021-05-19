@@ -14,7 +14,7 @@ from ClassBelasco import *
 from ClassTrithemius import *
 from ClassCeasar import*
 from ClassTransposeTwoLines import *
-
+from ClassDES import *
 #?=============================Initialize Window==============================
 #Todo: initialized tkinter which means window created
 root = Tk()
@@ -42,7 +42,8 @@ _result = StringVar()
 #Todo: get name class
 _class = StringVar()
 #Todo: List type
-list_type=('Vignere', 'Belasco', 'Trithemius', 'Ceasar',"Transpose Two Lines")
+list_type=('Vignere', 'Belasco', 'Trithemius', 'Ceasar',"Transpose Two Lines",
+            'DES')
 
 #?============================Function to encode==============================
 def Encode(key, message):
@@ -64,7 +65,9 @@ def Encode(key, message):
     elif _type == "Transpose Two Lines":
         obj = CChuyenViHaiDong(message)
         ciphertext = obj.MaHoa()
-
+    elif _type =='DES':
+        obj = des()
+        ciphertext = obj.encrypt(key,message,padding=True)
     return ciphertext
 
 #?===========================Function to decode===============================
@@ -87,16 +90,19 @@ def Decode(key, message):
     elif _type == "Transpose Two Lines":
         obj = CChuyenViHaiDong(plaintext,message)
         plaintext = obj.GiaiMa()
-        
+    elif _type =='DES':
+        obj = des()
+        plaintext = obj.decrypt(key, message,padding=True)
+
     return plaintext
 
 #?=========================Function to set mode===============================
 def Mode():
-    _mess = (_text.get()).upper()
-    _key = (private_key.get()).upper()
+    _mess = _text.get()
+    _key = private_key.get()
 
     if(_mode.get() == 0):
-        _result.set(Encode(_key,_mess))
+        _result.set(repr(Encode(_key,_mess)))
     elif(_mode.get() == 1):
         _result.set(Decode(_key,_mess))
     else:
