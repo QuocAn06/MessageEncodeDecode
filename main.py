@@ -66,8 +66,8 @@ def Encode(key, message):
         obj = CChuyenViHaiDong(message)
         ciphertext = obj.MaHoa()
     elif _type =='DES':
-        obj = des()
-        ciphertext = obj.encrypt(key,message,padding=True)
+        obj = CDes(message,key)
+        ciphertext = obj.MaHoa()
     return ciphertext
 
 #?===========================Function to decode===============================
@@ -91,8 +91,8 @@ def Decode(key, message):
         obj = CChuyenViHaiDong(plaintext,message)
         plaintext = obj.GiaiMa()
     elif _type =='DES':
-        obj = des()
-        plaintext = obj.decrypt(key, message,padding=True)
+        obj = CDes(plaintext,key,message)
+        plaintext = obj.GiaiMa()
 
     return plaintext
 
