@@ -51,10 +51,10 @@ def Encode(key, message):
     _type = _class.get()
 
     if  _type == "Vignere":
-        obj = CVignere(message.upper(),key)
+        obj = CVignere(message.upper(),key.upper())
         ciphertext = obj.MaHoa()
     elif _type == "Belasco":
-        obj = CBelasco(message.upper(),key)
+        obj = CBelasco(message.upper(),key.upper())
         ciphertext = obj.MaHoa()
     elif _type == "Trithemius":
         obj = CTrithemius(message.upper())
@@ -77,10 +77,10 @@ def Decode(key, message):
     _type = _class.get()
 
     if _type == "Vignere":
-        obj = CVignere(plaintext,key,message.upper())
+        obj = CVignere(plaintext,key.upper(),message.upper())
         plaintext = obj.GiaiMa()
     elif _type == "Belasco":
-        obj = CBelasco(plaintext,key,message.upper())
+        obj = CBelasco(plaintext,key.upper(),message.upper())
         plaintext = obj.GiaiMa()
     elif _type == "Trithemius":
         obj = CTrithemius(plaintext,message.upper())
