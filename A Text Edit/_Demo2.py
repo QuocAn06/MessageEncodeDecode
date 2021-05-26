@@ -6,7 +6,7 @@ root = Tk()
 root.title('Codemy.com Image Viewer')
 root.iconbitmap('e:/_study/codecademy.ico')
 
-root.filename = filedialog.askopenfilename(initialdir = "/_image/", 
+root.filename = filedialog.askopenfilename(initialdir = "/_image", 
                                            title= "Select A File",
                                            filetypes =(("png files","*.png"),
                                                        ("jpg files","*.jpg"),
