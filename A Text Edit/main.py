@@ -3,9 +3,15 @@ from tkinter import filedialog
 from tkinter import font
 
 root = Tk()
-root.title('My TextPad!')
+root.title('MyCode - My TextPad!')
 root.iconbitmap("c:/Users/Admin/Desktop/BT ATHTTT/_project/A Text Edit/image/alienware.ico")
 root.geometry("1000x676")
+
+#Create  New File Function
+def new_file():
+    my_text.delete("1.0",END)
+    root.title('New File - My TextPad!')
+    status_bar.config(text= "New File      ")
 
 #Create main Frame
 my_frame = Frame(root)
@@ -31,11 +37,12 @@ root.config(menu= my_menu)
 #Add File Menu
 file_menu = Menu(my_menu, tearoff= False)
 my_menu.add_cascade(label= "File", menu= file_menu)
-file_menu.add_command(label= "New File")
+file_menu.add_command(label= "New File", command= new_file)
 file_menu.add_separator()
 file_menu.add_command(label= "Open File...")
 file_menu.add_separator()
 file_menu.add_command(label= "Save")
+file_menu.add_command(label= "Save As")
 file_menu.add_separator()
 file_menu.add_command(label= "Exit", command= root.quit)
 
@@ -50,7 +57,7 @@ edit_menu.add_command(label= "Undo")
 edit_menu.add_command(label= "Redo")
 
 #Add Status Bar  To Bottom Of Add
-status_bar = Label(root, text= 'Ready    ', anchor=E)
+status_bar = Label(root, text= 'Ready      ', anchor=E)
 status_bar.pack(fill= X, side= BOTTOM, ipady= 5)
 
 
