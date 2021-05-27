@@ -38,19 +38,39 @@ def open_file():
     #Open the file
     text_file=  open(text_file, 'r')
     stuff= text_file.read()
-
     #Add file to textbox
     my_text.insert(END, stuff)
-
     #Close the opened file
     text_file.close()
 
+#Create Save As File Function
+def save_as_file():
+    text_file= filedialog.asksaveasfilename(defaultextension= ".*",
+                                            initialdir= "C:/Users/Admin/Desktop/BT ATHTTT/_project/A Text Edit/",
+                                            title= "Save File",
+                                            filetypes=(("Text Files","*.txt"),
+                                                        ("HTML Files",".html"),
+                                                        ("Python Files","*.py"),
+                                                        ("All files","*.*")) )
+    if text_file:
+        #Update Status Bars
+        name= text_file
+        status_bar.config(text=f'{name}        ')
+        name= name.replace("C:/Users/Admin/Desktop/BT ATHTTT/_project/A Text Edit/","")
+        root.title(f'{name} - TextPad!')
+
+        #Save the file
+        text_file= open(text_file, 'w')
+        text_file.write(my_text.get(1.0, END))
+        #Close the file
+        text_file.close()
+
 #Create main Frame
-my_frame = Frame(root)
+my_frame= Frame(root)
 my_frame.pack(pady=5)
 
 #Create our Scrollbar For the Text Box
-text_scroll = Scrollbar(my_frame)
+text_scroll= Scrollbar(my_frame)
 text_scroll.pack(side=RIGHT, fill=Y)
 
 #Create Text Box
@@ -74,7 +94,7 @@ file_menu.add_separator()
 file_menu.add_command(label= "Open File...", command= open_file)
 file_menu.add_separator()
 file_menu.add_command(label= "Save")
-file_menu.add_command(label= "Save As")
+file_menu.add_command(label= "Save As", command= save_as_file)
 file_menu.add_separator()
 file_menu.add_command(label= "Exit", command= root.quit)
 
