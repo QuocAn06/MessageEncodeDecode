@@ -4,14 +4,46 @@ from tkinter import font
 
 root = Tk()
 root.title('MyCode - My TextPad!')
-root.iconbitmap("c:/Users/Admin/Desktop/BT ATHTTT/_project/A Text Edit/image/alienware.ico")
+root.iconbitmap("C:/Users/Admin/Desktop/BT ATHTTT/_project/A Text Edit/image/alienware.ico")
 root.geometry("1000x676")
 
-#Create  New File Function
+#Create New File Function
 def new_file():
+    #Delete previous text
     my_text.delete("1.0",END)
+
+    #Update status bars
     root.title('New File - My TextPad!')
-    status_bar.config(text= "New File      ")
+    status_bar.config(text= "New File        ")
+
+#Create Open file Function
+def open_file():
+    #Delete previous text
+    my_text.delete("1.0",END)
+
+    #Grab Filename
+    text_file= filedialog.askopenfilename(initialdir= "C:/Users/Admin/Desktop/BT ATHTTT/_project/A Text Edit/", 
+                                          title= "Open File",
+                                          filetypes= (("Text Files","*.txt"), 
+                                                      ("HTML Files","*.html"),
+                                                      ("Python Files","*.py"),
+                                                      ("All files","*.*")) )
+    
+    #Update status bars
+    name = text_file
+    status_bar.config(text=f'{name}        ')
+    name= name.replace("C:/Users/Admin/Desktop/BT ATHTTT/_project/A Text Edit/","")
+    root.title(f'{name} - TextPad!')
+
+    #Open the file
+    text_file=  open(text_file, 'r')
+    stuff= text_file.read()
+
+    #Add file to textbox
+    my_text.insert(END, stuff)
+
+    #Close the opened file
+    text_file.close()
 
 #Create main Frame
 my_frame = Frame(root)
@@ -39,7 +71,7 @@ file_menu = Menu(my_menu, tearoff= False)
 my_menu.add_cascade(label= "File", menu= file_menu)
 file_menu.add_command(label= "New File", command= new_file)
 file_menu.add_separator()
-file_menu.add_command(label= "Open File...")
+file_menu.add_command(label= "Open File...", command= open_file)
 file_menu.add_separator()
 file_menu.add_command(label= "Save")
 file_menu.add_command(label= "Save As")
@@ -57,7 +89,7 @@ edit_menu.add_command(label= "Undo")
 edit_menu.add_command(label= "Redo")
 
 #Add Status Bar  To Bottom Of Add
-status_bar = Label(root, text= 'Ready      ', anchor=E)
+status_bar = Label(root, text= 'Ready        ', anchor=E)
 status_bar.pack(fill= X, side= BOTTOM, ipady= 5)
 
 
