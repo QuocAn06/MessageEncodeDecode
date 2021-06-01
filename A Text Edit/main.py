@@ -55,7 +55,7 @@ def save_as_file():
     if text_file:
         #Update Status Bars
         name= text_file
-        status_bar.config(text=f'{name}        ')
+        status_bar.config(text=f'Saved: {name}        ')
         name= name.replace("C:/Users/Admin/Desktop/BT ATHTTT/_project/A Text Edit/","")
         root.title(f'{name} - TextPad!')
 
