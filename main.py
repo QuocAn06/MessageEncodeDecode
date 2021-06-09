@@ -127,7 +127,7 @@ def window_Update(event):
     else:
         key_Entry['state']='normal'
 #?==========================Labels and Buttons================================
-Label(root, font= ("Segoe UI",12,'bold'), text='Message: ').place(x= 60,y=60)
+Label(root, font= ("Segoe UI",12,'bold'), text='Message: ').place(x= 10,y=60)
 Entry(root,font=("Segoe UI",10),textvariable=_text, bg='ghost white').place(x= 280,y=60, 
         height = 22, width = 350)
 Label(root, font= ("Segoe UI",12,'bold'), text='Key: ').place(x= 60,y=90)
