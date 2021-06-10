@@ -67,7 +67,7 @@ def Encode(key, message):
         ciphertext = obj.MaHoa()
     elif _type =='DES':
         obj = CDes(message,key)
-        ciphertext = obj.MaHoa()
+        ciphertext = repr(obj.MaHoa())
         
     return ciphertext
 
@@ -103,7 +103,7 @@ def Mode():
     _key = private_key.get()
 
     if(_mode.get() == 0):
-        _result.set(repr(Encode(_key,_mess)))
+        _result.set(Encode(_key,_mess))
     elif(_mode.get() == 1):
         _result.set(Decode(_key,_mess))
     else:

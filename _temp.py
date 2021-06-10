@@ -2,6 +2,7 @@
 #?===============================Import Libraries=============================
 #Todo: import tkinter module
 from tkinter import *
+from tkinter import filedialog
 from tkinter import ttk
 
 #Todo: other necessery modules
@@ -14,20 +15,153 @@ from ClassCeasar import*
 from ClassTransposeTwoLines import *
 from ClassDES import *
 
+
 #?=============================Initialize Window==============================
+#Todo: initialized tkinter which means window created
 root = Tk()
-root.title('Message Encode App')
+
+#Todo: set the title of the window
+root.title('Start - Message Encode App')
+
+#Todo: set the width and height of the window
 root.geometry("800x380")
+
+#?==============================Define variables==============================
+#Todo: variable that stores the message value 
+_text = StringVar()
+#Todo:  variable stores the key for encoded and decoded
+private_key = StringVar()
 #Todo: variable saves the encoded or decoded mode 
 _mode = IntVar()
+#Todo: variable store the result
+_result = StringVar()
+#Todo: get name class
+_class = StringVar()
+
+#?========================Function to reset window============================
+def Reset():
+    #Delete previous text
+    myText.delete("1.0",END)
+    myKey.delete("1.0",END)
+    myResult.delete("1.0",END)
+
+    #Update status bars
+    root.title('New File - Message Encode App')
+    status_bar.config(text= "New        ")
+
+#?======================Create Save As File Function==========================
+def save_as_file():
+    text_file= filedialog.asksaveasfilename(defaultextension= ".*",
+                                            initialdir= "C:/Users/Admin/Desktop/BT ATHTTT/_project/A Text Edit/",
+                                            title= "Save File",
+                                            filetypes=(("Text Files","*.txt"),
+                                                        ("HTML Files",".html"),
+                                                        ("Python Files","*.py"),
+                                                        ("All files","*.*")) )
+
+    if text_file:
+        #Update Status Bars
+        name= text_file
+        status_bar.config(text=f'Saved: {name}        ')
+        name= name.replace("C:/Users/Admin/Desktop/BT ATHTTT/_project/Output/","")
+        root.title(f'{name} - Message Encode App')
+
+        #Save the file
+        text_file= open(text_file, 'w')
+        text_file.write(myResult.get(1.0, END))
+
+        #Close the file
+        text_file.close()
+
+#?========================Function To Encode==================================
+def Encode(key, message):
+    ciphertext=""
+    _type = _class.get()
+
+    if  _type == "Vignere":
+        obj = CVignere(message.upper(),key.upper())
+        ciphertext = obj.MaHoa()
+    elif _type == "Belasco":
+        obj = CBelasco(message.upper(),key.upper())
+        ciphertext = obj.MaHoa()
+    elif _type == "Trithemius":
+        obj = CTrithemius(message.upper())
+        ciphertext = obj.MaHoa()
+    elif _type == "Ceasar":
+        obj = CCeasar(message.upper(),3)
+        ciphertext = obj.MaHoa()
+    elif _type == "Transpose Two Lines":
+        obj = CChuyenViHaiDong(message.upper())
+        ciphertext = obj.MaHoa()
+    elif _type =='DES':
+        obj = CDes(message,key)
+        ciphertext = repr(obj.MaHoa())
+        
+    return ciphertext
+
+#?========================Function To Decode==================================
+def Decode(key, message):
+    plaintext=""
+    _type = _class.get()
+
+    if _type == "Vignere":
+        obj = CVignere(plaintext,key.upper(),message.upper())
+        plaintext = obj.GiaiMa()
+    elif _type == "Belasco":
+        obj = CBelasco(plaintext,key.upper(),message.upper())
+        plaintext = obj.GiaiMa()
+    elif _type == "Trithemius":
+        obj = CTrithemius(plaintext,message.upper())
+        plaintext = obj.GiaiMa()
+    elif _type == "Ceasar":
+        obj = CCeasar(plaintext,3,message.upper()) 
+        plaintext = obj.GiaiMa()
+    elif _type == "Transpose Two Lines":
+        obj = CChuyenViHaiDong(plaintext,message.upper())
+        plaintext = obj.GiaiMa()
+    elif _type =='DES':
+        obj = CDes(plaintext,key,message)
+        plaintext = obj.GiaiMa().decode("utf-8")
+
+    return plaintext
+
+#?==============Function To Handle Encode/ Decrypt Request===================
+def encryptedResults():
+    _mess = myText.get(1.0,'end-1c')
+    _key = myKey.get(1.0,'end-1c')
+
+    if(_mode.get()== 0):
+        _text= 'Encrypted:\n    ' + Encode(_key,_mess)
+        myResult.delete('1.0',END)
+        myResult.insert(END,_text)
+    elif(_mode.get() == 1):
+        myResult.delete('1.0',END)
+        _text= 'Decrypted:\n    ' + Decode(_key,_mess)
+        myResult.insert(END,_text)
+    else:
+        _result.set('Invalid Mode')
+
+#?========================Function To Thoose Type Encode======================
+def chooseTypeEncode(event):
+    a = _class.get()
+    if a in ["Trithemius","Ceasar","Transpose Two Lines"]:
+        myKey.config(state= DISABLED, bg= '#e3e0dc')
+    else:
+        myKey.config(state= NORMAL, bg= '#ffffff')
 
 #?==============================Create Label=================================
-Label(root, font= ("Segoe UI",13), anchor="e", text='Input Type: ', width=11).place(x= 10,y= 50)
-Label(root, font= ("Segoe UI",13), anchor="e", text='Message: ', width=11).place(x= 10,y= 90)
-Label(root, font= ("Segoe UI",13), anchor="e", text='Key: ', width=11).place(x= 10,y= 160)
-Label(root, font= ("Segoe UI",13), anchor="e", text='Encode Type: ', width=11).place(x= 10,y= 200)
-Label(root, font= ("Segoe UI",13), anchor="e", text='Mode: ', width=11).place(x= 10,y= 240)
-Label(root, font= ("Segoe UI",13), anchor="w", text='Result: ', width=11).place(x= 400,y= 20)
+Label(root, font= ("Segoe UI",13), anchor="e", text='Input Type: ', 
+        width=11).place(x= 10,y= 50)
+Label(root, font= ("Segoe UI",13), anchor="e", text='Message: ', 
+        width=11).place(x= 10,y= 90)
+Label(root, font= ("Segoe UI",13), anchor="e", text='Key: ', 
+        width=11).place(x= 10,y= 160)
+Label(root, font= ("Segoe UI",13), anchor="e", text='Encode Type: ', 
+        width=11).place(x= 10,y= 200)
+Label(root, font= ("Segoe UI",13), anchor="e", text='Mode: ', 
+        width=11).place(x= 10,y= 240)
+Label(root, font= ("Segoe UI",13), anchor="w", text='Result: ', 
+        width=11).place(x= 400,y= 20)
 
 #?==============================Create Combox=================================
 list_InputType=('Text','File')
@@ -38,28 +172,28 @@ combobox_1.place(x= 125,y= 50)
 
 list_type=('Vignere', 'Belasco', 'Trithemius', 'Ceasar',
            "Transpose Two Lines", 'DES')
-combobox_2 = ttk.Combobox(root, font=("Segoe UI", 13), width=25)
+combobox_2 = ttk.Combobox(root, font=("Segoe UI", 13), width=25,
+                                textvariable=_class)
 combobox_2['values'] = sorted(list_type)
 combobox_2.current(0)
 combobox_2.place(x= 125,y= 200)
-
-#_combobox.bind("<<ComboboxSelected>>",window_Update)
+combobox_2.bind("<<ComboboxSelected>>",chooseTypeEncode)
 
 #?==============================Add RadioButton===============================
-Radiobutton(root, font=("Segoe UI",10,'bold'), text="Encode", variable = _mode, value = 0,
-            command = (_mode.get())).place(x = 125, y=242)
-Radiobutton(root, font=("Segoe UI",10,'bold'), text="Decode", variable = _mode, value = 1,
-            command = (_mode.get())).place(x = 225, y=242)
+Radiobutton(root, font=("Segoe UI",10,'bold'), text="Encode", 
+    variable = _mode, value = 0, command = (_mode.get())).place(x = 125, y=242)
+Radiobutton(root, font=("Segoe UI",10,'bold'), text="Decode", 
+    variable = _mode, value = 1, command = (_mode.get())).place(x = 225, y=242)
 
 
 #?==============================Create Text box===============================
 myText = Text(root,font= ("Segoe UI",13), width= 27)
 myText.place(x= 125, y= 90, height=60)
 
-myKey = Text(root,font= ("Segoe UI",13), width= 27, state='disabled', bg='#a8a7a5')
+myKey = Text(root,font= ("Segoe UI",13), width= 27)
 myKey.place(x= 125, y= 160, height=25)
 
-myResult =  Text(root,font= ("Segoe UI",13), width= 40)
+myResult =  Text(root,font= ("Segoe UI",13), width= 42)
 myResult.place(x= 400, y= 50, height=240)
 
 #?===============================Create Menu==================================
@@ -70,28 +204,24 @@ root.config(menu= my_menu)
 #?==============================Add File Menu=================================
 file_menu = Menu(my_menu, tearoff= False)
 my_menu.add_cascade(label= "File", menu= file_menu)
-file_menu.add_command(label= "New File")
-file_menu.add_separator()
-file_menu.add_command(label= "Open File...")
+file_menu.add_command(label= "New",command= Reset)
 file_menu.add_separator()
 file_menu.add_command(label= "Save")
-file_menu.add_command(label= "Save As")
+file_menu.add_command(label= "Save As",command= save_as_file)
 file_menu.add_separator()
 file_menu.add_command(label= "Exit", command= root.quit)
 
 #?==============================Add Edit Menu=================================
 edit_menu = Menu(my_menu, tearoff= False)
-my_menu.add_cascade(label= "File", menu= edit_menu)
+my_menu.add_cascade(label= "Edit", menu= edit_menu)
 edit_menu.add_command(label= "Cut")
 edit_menu.add_command(label= "Copy")
 edit_menu.add_command(label= "Paste")
-edit_menu.add_separator()
-edit_menu.add_command(label= "Undo")
-edit_menu.add_command(label= "Redo")
+
 
 #?==============================Add Button====================================
 Button(root,font=("Segoe UI",10,'bold'),text='RESULT',padx= 2, width= 29,
-            bg='#47b828',fg="#FFF").place(x= 125, y=300)
+        bg='#47b828',fg="#FFF", command=encryptedResults).place(x= 125, y=300)
 
 #?=====================Add Status Bar To Bottom Of App========================
 status_bar = Label(root, text= 'Ready        ', anchor=E)

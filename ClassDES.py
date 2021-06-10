@@ -35,8 +35,6 @@ class CDes:
         iv = secret_key
         k = des(secret_key, CBC, iv, pad=None, padmode=PAD_PKCS5)
         message = self.ciphertext[2:(len(self.ciphertext)-1)]
-        print(type(message))
-        print(message)
         self.plaintext = k.decrypt(binascii.a2b_hex(message), padmode=PAD_PKCS5)
         return self.plaintext
         
