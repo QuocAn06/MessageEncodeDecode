@@ -146,7 +146,7 @@ def Decode(key, message):
 
     return plaintext
 
-#? GET FILE NAME
+#?============================GET FILE NAME=================================
 def getFileName():
     myFile.delete("1.0",END)
 
@@ -290,16 +290,18 @@ root.config(menu= my_menu)
 #?==============================Add File Menu=================================
 file_menu = Menu(my_menu, tearoff= False)
 my_menu.add_cascade(label= "File", menu= file_menu)
-file_menu.add_command(label= "New",command= Reset)
+file_menu.add_command(label= "New", command= Reset, 
+                        accelerator='Ctrl+N')
 file_menu.add_separator()
-file_menu.add_command(label= "Save")
-file_menu.add_command(label= "Save As",command= save_as_file)
+file_menu.add_command(label= "Save",accelerator='Ctrl+S')
+file_menu.add_command(label= "Save As",command= save_as_file,
+                        accelerator='Ctrl+Shift+S')
 file_menu.add_separator()
-file_menu.add_command(label= "Exit", command= root.quit)
+file_menu.add_command(label= "Exit", command= root.quit, accelerator='Ctrl+E')
 
 #?==============================Add Edit Menu=================================
 edit_menu = Menu(my_menu, tearoff= False)
-my_menu.add_cascade(label= "Edit", menu= edit_menu)
+my_menu.add_cascade(label= "Edit", menu= edit_menu) 
 edit_menu.add_command(label= "Cut")
 edit_menu.add_command(label= "Copy")
 edit_menu.add_command(label= "Paste")
