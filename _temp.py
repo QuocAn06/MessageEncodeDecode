@@ -1,12 +1,16 @@
 
 #?===============================Import Libraries=============================
 #Todo: import tkinter module
+from ClassXOR import CXOR
 from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
 
 #Todo: other necessery modules
 import base64
+import string
+import random
+
 #Todo: import Class
 from ClassVignere import *
 from ClassBelasco import *
@@ -37,7 +41,7 @@ _mode = IntVar()
 _result = StringVar()
 #Todo: get name class
 _class = StringVar()
-
+typeInput= StringVar()
 #?========================Function to reset window============================
 def Reset():
     #Delete previous text
@@ -48,6 +52,17 @@ def Reset():
     #Update status bars
     root.title('New File - Message Encode App')
     status_bar.config(text= "New        ")
+#?========================Create Auto Key Function============================
+def autoKey():
+    #Delete previous text
+    myKey.delete("1.0",END)
+
+    #Auto key
+    letters = string.ascii_lowercase
+    key = "".join(random.choice(letters) for i in range(8))
+
+    #Add key to textbox
+    myKey.insert(END, key)
 
 #?======================Create Save As File Function==========================
 def save_as_file():
@@ -93,6 +108,9 @@ def Encode(key, message):
     elif _type == "Transpose Two Lines":
         obj = CChuyenViHaiDong(message.upper())
         ciphertext = obj.MaHoa()
+    elif _type == "XOR":
+        obj = CXOR(message.upper())
+        ciphertext = obj.MaHoa()
     elif _type =='DES':
         obj = CDes(message,key)
         ciphertext = repr(obj.MaHoa())
@@ -119,6 +137,9 @@ def Decode(key, message):
     elif _type == "Transpose Two Lines":
         obj = CChuyenViHaiDong(plaintext,message.upper())
         plaintext = obj.GiaiMa()
+    elif _type == "XOR":
+        obj = CXOR(message.upper())
+        plaintext = obj.MaHoa()
     elif _type =='DES':
         obj = CDes(plaintext,key,message)
         plaintext = obj.GiaiMa().decode("utf-8")
@@ -141,37 +162,73 @@ def encryptedResults():
     else:
         _result.set('Invalid Mode')
 
+#?====================Function To Choose Type Input===========================
+def chooseTypeInput(event):
+    type= typeInput.get()
+
+    if type== 'File':
+        #Destroy current control elements
+        messageLabel.place_forget()
+        myText.place_forget()
+
+        #create new control elements
+        fileLabel.place(x= 10,y= 90)
+        myFile.place(x= 125, y= 90, height=25)
+        browserButton.place(x= 297, y=120, height=25)
+    elif type== 'Text':
+        #Destroy current control elements
+        fileLabel.place_forget()
+        myFile.place_forget()
+        browserButton.place_forget()
+
+        #create new control elements
+        messageLabel.place(x= 10,y= 90)
+        myText.place(x= 125, y= 90, height=60)
+
 #?========================Function To Thoose Type Encode======================
 def chooseTypeEncode(event):
     a = _class.get()
-    if a in ["Trithemius","Ceasar","Transpose Two Lines"]:
+    if a in ["Trithemius","Ceasar","Transpose Two Lines",'XOR']:
         myKey.config(state= DISABLED, bg= '#e3e0dc')
+        keyButton.config(state=DISABLED)
     else:
         myKey.config(state= NORMAL, bg= '#ffffff')
+        keyButton.config(state=NORMAL)
 
 #?==============================Create Label=================================
 Label(root, font= ("Segoe UI",13), anchor="e", text='Input Type: ', 
         width=11).place(x= 10,y= 50)
-Label(root, font= ("Segoe UI",13), anchor="e", text='Message: ', 
-        width=11).place(x= 10,y= 90)
+
+messageLabel= Label(root, font= ("Segoe UI",13), anchor="e", text='Message: ', 
+        width=11)
+messageLabel.place(x= 10,y= 90)
+
+fileLabel= Label(root, font= ("Segoe UI",13), anchor="e", text='File name: ', 
+        width=11)
+
 Label(root, font= ("Segoe UI",13), anchor="e", text='Key: ', 
         width=11).place(x= 10,y= 160)
+
 Label(root, font= ("Segoe UI",13), anchor="e", text='Encode Type: ', 
         width=11).place(x= 10,y= 200)
+
 Label(root, font= ("Segoe UI",13), anchor="e", text='Mode: ', 
         width=11).place(x= 10,y= 240)
+
 Label(root, font= ("Segoe UI",13), anchor="w", text='Result: ', 
         width=11).place(x= 400,y= 20)
 
 #?==============================Create Combox=================================
 list_InputType=('Text','File')
-combobox_1 = ttk.Combobox(root, font=("Segoe UI", 13), width=25)
+combobox_1 = ttk.Combobox(root, font=("Segoe UI", 13), width=25, 
+                            textvariable= typeInput)
 combobox_1['values'] = list_InputType
 combobox_1.current(0)
 combobox_1.place(x= 125,y= 50)
+combobox_1.bind("<<ComboboxSelected>>",chooseTypeInput)
 
 list_type=('Vignere', 'Belasco', 'Trithemius', 'Ceasar',
-           "Transpose Two Lines", 'DES')
+           "Transpose Two Lines", 'DES', 'XOR')
 combobox_2 = ttk.Combobox(root, font=("Segoe UI", 13), width=25,
                                 textvariable=_class)
 combobox_2['values'] = sorted(list_type)
@@ -190,7 +247,9 @@ Radiobutton(root, font=("Segoe UI",10,'bold'), text="Decode",
 myText = Text(root,font= ("Segoe UI",13), width= 27)
 myText.place(x= 125, y= 90, height=60)
 
-myKey = Text(root,font= ("Segoe UI",13), width= 27)
+myFile = Text(root,font= ("Segoe UI",13), width= 27)
+
+myKey = Text(root,font= ("Segoe UI",13), width= 18)
 myKey.place(x= 125, y= 160, height=25)
 
 myResult =  Text(root,font= ("Segoe UI",13), width= 42)
@@ -220,8 +279,16 @@ edit_menu.add_command(label= "Paste")
 
 
 #?==============================Add Button====================================
-Button(root,font=("Segoe UI",10,'bold'),text='RESULT',padx= 2, width= 29,
-        bg='#47b828',fg="#FFF", command=encryptedResults).place(x= 125, y=300)
+resultButton= Button(root,font=("Segoe UI",10,'bold'),text= 'RESULT',padx= 2, 
+                width= 29, bg='#47b828',fg="#FFF", command= encryptedResults)
+resultButton.place(x= 125, y=300)
+
+browserButton= Button(root,font=("Segoe UI",10,'bold'),text= 'Browser',padx= 2,
+                width= 8, bg='#c9c7c5',fg="#000000")
+
+keyButton= Button(root,font=("Segoe UI",10,'bold'),text= 'Random',padx= 2,
+                width= 8, bg='#c9c7c5',fg="#000000", command= autoKey)
+keyButton.place(x= 297, y=160, height=25)
 
 #?=====================Add Status Bar To Bottom Of App========================
 status_bar = Label(root, text= 'Ready        ', anchor=E)
