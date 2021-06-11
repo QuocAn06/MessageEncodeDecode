@@ -146,10 +146,37 @@ def Decode(key, message):
 
     return plaintext
 
+#? GET FILE NAME
+def getFileName():
+    myFile.delete("1.0",END)
+
+    #Grab Filename
+    text_file= filedialog.askopenfilename(initialdir= "C:/Users/Admin/Desktop/BT ATHTTT/_project/A Text Edit/", 
+                                            title= "Open File",
+                                            filetypes= (("Text Files","*.txt"), 
+                                                        ("HTML Files","*.html"),
+                                                        ("Python Files","*.py"),
+                                                        ("All files","*.*")) )
+    name = text_file
+    myFile.insert(END,name)
+
 #?==============Function To Handle Encode/ Decrypt Request===================
 def encryptedResults():
-    _mess = myText.get(1.0,'end-1c')
+    _mess = StringVar()
     _key = myKey.get(1.0,'end-1c')
+
+    if typeInput.get()== 'Text':
+        _mess = myText.get(1.0,'end-1c')
+    elif typeInput.get()== 'File':
+        text_file= myFile.get(1.0,'end-1c')
+        
+        #Open the file
+        text_file=  open(text_file, 'r')
+        _mess= text_file.read()
+        
+        #Close the opened file
+        text_file.close()
+
 
     if(_mode.get()== 0):
         _text= 'Encrypted:\n    ' + Encode(_key,_mess)
@@ -284,7 +311,7 @@ resultButton= Button(root,font=("Segoe UI",10,'bold'),text= 'RESULT',padx= 2,
 resultButton.place(x= 125, y=300)
 
 browserButton= Button(root,font=("Segoe UI",10,'bold'),text= 'Browser',padx= 2,
-                width= 8, bg='#c9c7c5',fg="#000000")
+                width= 8, bg='#c9c7c5',fg="#000000", command= getFileName)
 
 keyButton= Button(root,font=("Segoe UI",10,'bold'),text= 'Random',padx= 2,
                 width= 8, bg='#c9c7c5',fg="#000000", command= autoKey)
