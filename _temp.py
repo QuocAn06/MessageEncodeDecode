@@ -146,7 +146,7 @@ def Decode(key, message):
 
     return plaintext
 
-#?============================GET FILE NAME============================
+#?============================GET FILE NAME=================================
 def getFileName():
     myFile.delete("1.0",END)
 
